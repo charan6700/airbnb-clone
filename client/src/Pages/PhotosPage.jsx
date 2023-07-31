@@ -1,45 +1,109 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import MainContainerWithFooter from "../Components/MainContainerWithFooter";
 import ThreePhotos from "../assets/svg-icons/ThreePhotos";
 import OnePhoto from "../assets/svg-icons/OnePhoto";
+import axios from "axios";
 
-function PhotosPage() {
-  const [images, setImages] = useState([]);
+function PhotosPage({ placeDoc, setPlaceDoc }) {
+  const [images, setImages] = useState(placeDoc.features.photos);
+  const [uploadedImages, setUploadedImages] = useState([]);
+  const [uploadedPercentage, setUploadedPercentage] = useState(0);
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    axios
+      .get("/images", images)
+      .then(({ data }) => {
+        setUploadedImages(data);
+        setReady(true);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  useEffect(() => {
+    const photosIdArray = uploadedImages.map((photoDoc) => {
+      photoDoc._id;
+    });
+
+    console.log(photosIdArray);
+
+    setPlaceDoc((prev) => {
+      return {
+        ...prev,
+        features: {
+          ...prev.features,
+          photos: photosIdArray,
+        },
+      };
+    });
+  }, [uploadedImages]);
+
+  if (!ready) return <div></div>;
 
   return (
     <div className="h-full w-full flex items-center justify-center fade-in">
       <MainContainerWithFooter>
         {images.length < 1 ? (
-          <UploadFileStartContent images={images} setImages={setImages} />
+          <UploadFileStartContent
+            placeDoc={placeDoc}
+            setPlaceDoc={setPlaceDoc}
+            images={images}
+            setImages={setImages}
+            uploadedImages={uploadedImages}
+            setUploadedImages={setUploadedImages}
+            setUploadedPercentage={setUploadedPercentage}
+          />
         ) : (
-          <UploadedImagesContent images={images} setImages={setImages} />
+          <UploadedImagesContent
+            placeDoc={placeDoc}
+            setPlaceDoc={setPlaceDoc}
+            images={images}
+            setImages={setImages}
+            uploadedImages={uploadedImages}
+            setUploadedImages={setUploadedImages}
+            uploadedPercentage={uploadedPercentage}
+            setUploadedPercentage={setUploadedPercentage}
+          />
         )}
       </MainContainerWithFooter>
     </div>
   );
 }
 
-function UploadFileStartContent({ images, setImages }) {
+function UploadFileStartContent({
+  placeDoc,
+  setPlaceDoc,
+  images,
+  setImages,
+  uploadedImages,
+  setUploadedImages,
+  setUploadedPercentage,
+}) {
   const inputRef = useRef();
 
   function handleFileUpload(ev) {
-    console.log(Array.from(ev.target.files).map(convertToBase64));
-    setImages(Array.from(ev.target.files).map(convertToBase64));
-  }
-
-  function convertToBase64(file) {
-    return new Promise((resolve) => {
-      const reader = new FileReader();
-      let base64 = "";
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        base64 = reader.result;
-        resolve(base64);
-      };
-      reader.onerror = (err) => {
-        console.log(err);
-      };
-    });
+    const files = ev.target.files;
+    setImages(files);
+    const data = new FormData();
+    for (const file of files) {
+      data.append("photos", file);
+    }
+    data.append("placeId", placeDoc._id);
+    const options = {
+      onUploadProgress: (progressEvent) => {
+        const { loaded, total } = progressEvent;
+        let percent = Math.floor((loaded * 100) / total);
+        if (percent < 100) setUploadedPercentage(percent);
+      },
+    };
+    axios
+      .post("/upload-photos", data, options)
+      .then(({ data }) => {
+        setUploadedPercentage(100);
+        setUploadedImages(data);
+        setUploadedPercentage(0);
+      })
+      .catch((err) => console.log(err));
   }
 
   return (
@@ -90,33 +154,72 @@ function UploadFileStartContent({ images, setImages }) {
   );
 }
 
-function UploadedImagesContent({ images, setImages }) {
+function UploadedImagesContent({
+  placeDoc,
+  images,
+  setImages,
+  uploadedImages,
+  setUploadedImages,
+  uploadedPercentage,
+  setUploadedPercentage,
+}) {
   const inputRef = useRef();
 
   function handleFileUpload(ev) {
-    setImages((prev) => {
-      return [...prev, ...ev.target.files.map(convertToBase64)];
-    });
+    const files = ev.target.files;
+    setImages((prev) => [...prev, ...files]);
+    const data = new FormData();
+    for (const file of files) {
+      data.append("photos", file);
+    }
+    data.append("placeId", placeDoc._id);
+    const options = {
+      onUploadProgress: (progressEvent) => {
+        const { loaded, total } = progressEvent;
+        let percent = Math.floor((loaded * 100) / total);
+        if (percent < 100) setUploadedPercentage(percent);
+      },
+    };
+    axios
+      .post("/upload-photos", data, options)
+      .then(({ data }) => {
+        setUploadedPercentage(100);
+        setUploadedImages((prev) => [...prev, ...data]);
+        setUploadedPercentage(0);
+      })
+      .catch((err) => console.log(err));
   }
 
-  function convertToBase64(file) {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      console.log(reader.result);
-      return reader.result;
-    };
-    reader.onerror = (err) => {
-      console.log(err);
-    };
+  function getFirstFourImages() {
+    const elementArray = [];
+    for (let i = 1; i < 4; i++) {
+      elementArray.push(
+        <div key={i} className="w-1/2 h-[213px] mb-4 px-[8px]">
+          <ImageContent
+            images={images}
+            index={i}
+            inputRef={inputRef}
+            uploadedImages={uploadedImages}
+            uploadedPercentage={uploadedPercentage}
+          />
+        </div>
+      );
+    }
+    return elementArray;
   }
 
   function getExtraAddedImages() {
     const elementArray = [];
     for (let i = 4; i < images.length; i++) {
       elementArray.push(
-        <div className="w-1/2 min-h-[213px] mb-4 px-[8px]">
-          <ImageContent images={images} index={i} inputRef={inputRef} />
+        <div key={i} className="w-1/2 h-[213px] mb-4 px-[8px]">
+          <ImageContent
+            images={images}
+            index={i}
+            inputRef={inputRef}
+            uploadedImages={uploadedImages}
+            uploadedPercentage={uploadedPercentage}
+          />
         </div>
       );
     }
@@ -169,21 +272,16 @@ function UploadedImagesContent({ images, setImages }) {
       </div>
       <div className="flex flex-wrap items-stretch justify-start w-[716px]">
         <div className="w-full mb-4 px-[8px]">
-          <div className="h-full">
-            <img src={images[0]} alt="" className="w-[720px] h-[467px]" />
-          </div>
+          <CoverImageContent
+            images={images}
+            uploadedImages={uploadedImages}
+            uploadedPercentage={uploadedPercentage}
+          />
         </div>
-        <div className="w-1/2 min-h-[213px] flex items-center justify-center mb-4 px-[8px]">
-          <ImageContent images={images} index={1} inputRef={inputRef} />
-        </div>
-        <div className="w-1/2 min-h-[213px] mb-4 px-[8px]">
-          <ImageContent images={images} index={2} inputRef={inputRef} />
-        </div>
-        <div className="w-1/2 min-h-[213px] mb-4 px-[8px]">
-          <ImageContent images={images} index={3} inputRef={inputRef} />
-        </div>
+
+        {getFirstFourImages()}
         {images.length > 4 && getExtraAddedImages()}
-        <div className="w-1/2 min-h-[213px] mb-4 px-[8px]">
+        <div className="w-1/2 h-[213px] mb-4 px-[8px]">
           <AddMorePhotoContent inputRef={inputRef} />
         </div>
       </div>
@@ -191,10 +289,83 @@ function UploadedImagesContent({ images, setImages }) {
   );
 }
 
-function ImageContent({ images, index, inputRef }) {
-  const [isHovered, setIsHovered] = useState(false);
+function LoadingImageContent({ images, index, uploadedPercentage }) {
+  return (
+    <div className={"flex items-center relative justify-center w-full h-full"}>
+      {index < images.length ? (
+        <>
+          <div className="absolute w-full h-full p-5 z-10">
+            <div className="w-full flex justify-start">
+              <svg
+                role="progressbar"
+                className="bg-transparent -rotate-90 border-2 rounded-full border-white"
+                width={32}
+                height={32}
+                viewBox="0 0 32 32"
+              >
+                <circle
+                  className="stroke-white progress-circle"
+                  r={16}
+                  cx={16}
+                  cy={16}
+                  style={{ strokeDasharray: `${uploadedPercentage}, 100` }}
+                />
+              </svg>
+            </div>
+          </div>
+          <div className="absolute w-full h-full bg-white bg-opacity-50"></div>
+          (images[index] &&
+          <img
+            src={URL.createObjectURL(images[index])}
+            alt=""
+            className="w-full h-full"
+          />{" "}
+          )
+        </>
+      ) : (
+        <OnePhoto />
+      )}
+    </div>
+  );
+}
 
-  console.log(index + ": " + images[index]);
+function CoverImageContent({ images, uploadedImages, uploadedPercentage }) {
+  if (uploadedImages.length < 1)
+    return (
+      <LoadingImageContent
+        images={images}
+        index={0}
+        uploadedPercentage={uploadedPercentage}
+      />
+    );
+  return (
+    <div className="h-full">
+      <img
+        src={"http://localhost:3000/photos/" + uploadedImages[0].fileName}
+        alt=""
+        className="w-[720px] h-[467px]"
+      />
+    </div>
+  );
+}
+
+function ImageContent({
+  images,
+  index,
+  inputRef,
+  uploadedImages,
+  uploadedPercentage,
+}) {
+  if (index < images.length && index >= uploadedImages.length)
+    return (
+      <LoadingImageContent
+        images={images}
+        index={index}
+        uploadedPercentage={uploadedPercentage}
+      />
+    );
+
+  const [isHovered, setIsHovered] = useState(false);
 
   function getBorderClass(isHovered) {
     if (index >= images.length) {
@@ -207,7 +378,7 @@ function ImageContent({ images, index, inputRef }) {
   return (
     <div
       className={
-        "flex items-center relative justify-center w-full min-h-[213px] " +
+        "flex items-center relative justify-center w-full h-full " +
         getBorderClass(isHovered)
       }
       onMouseOver={() => setIsHovered(true)}
@@ -223,7 +394,13 @@ function ImageContent({ images, index, inputRef }) {
               <ImageOptionsButton />
             </div>
           </div>
-          <img src={images[index]} alt="" className="w-full h-[213px]" />
+          <img
+            src={
+              "http://localhost:3000/photos/" + uploadedImages[index].fileName
+            }
+            alt=""
+            className="w-full h-full"
+          />
         </>
       ) : (
         <OnePhoto />
@@ -282,10 +459,6 @@ function ImageOptionsButton() {
       className={
         "bg-white opacity-80 hover:opacity-100 hover:scale-[1.04] active:scale-100 transition-transform ease-in-out rounded-full p-2"
       }
-      onMouseDown={() => setIsMouseDown(true)}
-      onMouseUp={() => setIsMouseDown(false)}
-      onMouseOver={() => setIsMouseOver(true)}
-      onMouseLeave={() => setIsMouseOver(false)}
     >
       <span>
         <svg

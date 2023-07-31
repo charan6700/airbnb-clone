@@ -5,8 +5,11 @@ require("dotenv").config();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
+const multer = require("multer");
+const fs = require("fs");
 const User = require("./models/UserModel");
 const Place = require("./models/PlaceModel");
+const Image = require("./models/ImageModel");
 
 const salt = bcrypt.genSaltSync(10);
 const secret = "djf8ueh3ad939j3k8ejh398";
@@ -21,6 +24,7 @@ const corsOptions = {
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors(corsOptions));
+app.use(express.static("public"));
 
 mongoose
   .connect(process.env.MONGO_URL)
@@ -145,7 +149,7 @@ app.put("/place/:placeId", async (req, res) => {
       property: newPlaceDoc.property,
       features: newPlaceDoc.features,
     });
-    console.log("updated place: ", JSON.stringify(updatedPlace));
+    console.log(updatedPlace);
     res.json("successfully updated the place!");
   } catch (err) {
     console.log("Unable to update place: " + err);
@@ -155,6 +159,35 @@ app.put("/place/:placeId", async (req, res) => {
 
 app.post("/logout", (req, res) => {
   res.cookie("token", "").json(true);
+});
+
+const upload = multer({ dest: "public/photos" });
+
+app.post("/upload-photos", upload.array("photos", 50), async (req, res) => {
+  const uploadedPhotos = [];
+  for (const file of req.files) {
+    fs.renameSync(file.path, file.path + ".jpg");
+    const newPhoto = await Image.create({
+      fileName: file.filename + ".jpg",
+      caption: "",
+      placeId: req.body.placeId,
+    });
+    uploadedPhotos.push(newPhoto);
+  }
+
+  res.json(uploadedPhotos);
+});
+
+app.get("/images", async (req, res) => {
+  console.log(req.body);
+  const foundPhotos = [];
+  if (req.body && req.body.length) {
+    for (const id of req.body) {
+      const photo = await Image.findById(id);
+      foundPhotos.push(photo);
+    }
+  }
+  res.json(foundPhotos);
 });
 
 app.listen(3000, () => {

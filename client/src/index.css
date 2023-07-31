@@ -79,6 +79,12 @@
   transform-origin: 0% 0%;
 }
 
+.progress-circle {
+  fill: rgb(0, 0, 0, 0.6);
+  stroke-width: 32;
+  transition: stroke-dasharray 0.2s ease 0s;
+}
+
 @keyframes dropUp {
   0% {
     opacity: 0;
