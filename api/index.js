@@ -34,6 +34,16 @@ app.get("/test", (req, res) => {
   res.json("test is successful");
 });
 
+app.post("/test", async (req, res) => {
+  const updatedPlace = await Place.findByIdAndUpdate(
+    "64b7ebb547d7006cb6ed73db",
+    {
+      $push: { "features.photos": "test" },
+    }
+  );
+  res.json(updatedPlace);
+});
+
 app.post("/register", async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -172,22 +182,24 @@ app.post("/upload-photos", upload.array("photos", 50), async (req, res) => {
       caption: "",
       placeId: req.body.placeId,
     });
+    const updatedPlace = await Place.findByIdAndUpdate(req.body.placeId, {
+      $push: { "features.photos": newPhoto._id },
+    });
     uploadedPhotos.push(newPhoto);
   }
 
   res.json(uploadedPhotos);
 });
 
-app.get("/images", async (req, res) => {
-  console.log(req.body);
-  const foundPhotos = [];
-  if (req.body && req.body.length) {
-    for (const id of req.body) {
-      const photo = await Image.findById(id);
-      foundPhotos.push(photo);
-    }
+app.get("/image/:imageId", async (req, res) => {
+  const { imageId } = req.params;
+
+  try {
+    const photo = await Image.findById(imageId);
+    res.json(photo);
+  } catch (err) {
+    res.status(400).json(err);
   }
-  res.json(foundPhotos);
 });
 
 app.listen(3000, () => {

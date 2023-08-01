@@ -11,32 +11,17 @@ function PhotosPage({ placeDoc, setPlaceDoc }) {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    axios
-      .get("/images", images)
-      .then(({ data }) => {
-        setUploadedImages(data);
-        setReady(true);
-      })
-      .catch((err) => console.log(err));
+    if (images?.length < 1) setReady(true);
+    for (let i = 0; i < images.length; i++) {
+      axios
+        .get("/image/" + images[i])
+        .then(({ data }) => {
+          setUploadedImages((prev) => [...prev, data]);
+          if (i === images.length - 1) setReady(true);
+        })
+        .catch((err) => console.log(err));
+    }
   }, []);
-
-  useEffect(() => {
-    const photosIdArray = uploadedImages.map((photoDoc) => {
-      photoDoc._id;
-    });
-
-    console.log(photosIdArray);
-
-    setPlaceDoc((prev) => {
-      return {
-        ...prev,
-        features: {
-          ...prev.features,
-          photos: photosIdArray,
-        },
-      };
-    });
-  }, [uploadedImages]);
 
   if (!ready) return <div></div>;
 
@@ -108,7 +93,7 @@ function UploadFileStartContent({
 
   return (
     <div className="flex flex-col mt-6 justify-center items-center max-w-[640px] h-full">
-      <div className="">
+      <div className="h-full">
         <div className="mb-8 break-words w-full">
           <h1 className="font-semibold text-4xl mb-4">
             Add some photos of your house
@@ -120,7 +105,7 @@ function UploadFileStartContent({
             </span>
           </div>
         </div>
-        <div className="flex items-center justify-center w-full border border-dashed border-neutral-400 h-[50vh]">
+        <div className="flex items-center mb-10 justify-center w-full border border-dashed border-neutral-400 h-[50vh] min-h-[250px]">
           <div className="hidden">
             <input
               type="file"
@@ -131,7 +116,7 @@ function UploadFileStartContent({
               onChange={handleFileUpload}
             />
           </div>
-          <div className="flex flex-col items-center justify-center">
+          <div className="flex flex-col items-center justify-center h-full">
             <ThreePhotos />
             <div className="font-[700] text-xl pt-2 pb-1">
               Drag your photos here
@@ -314,13 +299,11 @@ function LoadingImageContent({ images, index, uploadedPercentage }) {
             </div>
           </div>
           <div className="absolute w-full h-full bg-white bg-opacity-50"></div>
-          (images[index] &&
           <img
             src={URL.createObjectURL(images[index])}
             alt=""
             className="w-full h-full"
-          />{" "}
-          )
+          />
         </>
       ) : (
         <OnePhoto />
