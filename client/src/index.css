@@ -85,6 +85,23 @@
   transition: stroke-dasharray 0.2s ease 0s;
 }
 
+.textarea-container {
+  box-shadow: grey 0px 0px 0px 1px inset;
+}
+
+.textarea-container-invalid {
+  box-shadow: firebrick 0px 0px 0px 1px inset;
+  background-color: rgb(255, 248, 246);
+}
+
+.textarea-container-active {
+  box-shadow: black 0px 0px 0px 2px inset;
+}
+
+.textarea-container-invalid-active {
+  box-shadow: firebrick 0px 0px 0px 2px inset;
+}
+
 @keyframes dropUp {
   0% {
     opacity: 0;

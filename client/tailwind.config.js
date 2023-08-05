@@ -6,6 +6,7 @@ export default {
       colors: {
         primary: "#ff385c",
         primaryHover: "#e53252",
+        error: "#c13515",
       },
     },
   },

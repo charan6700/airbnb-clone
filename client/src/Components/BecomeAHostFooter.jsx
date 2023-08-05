@@ -12,6 +12,7 @@ const stagesArray = [
   "stand-out",
   "amenities",
   "photos",
+  "title",
   "",
 ];
 
