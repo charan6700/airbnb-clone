@@ -59,6 +59,11 @@
   box-shadow: 0 0 0 2px black;
 }
 
+.black-border-hover:hover {
+  border: 1px solid black;
+  transition: border 0.2s, transform 0.1s;
+}
+
 .btn-click-shrink:active {
   transition-property: transform;
   transition-duration: 0.15s;
@@ -100,6 +105,27 @@
 
 .textarea-container-invalid-active {
   box-shadow: firebrick 0px 0px 0px 2px inset;
+}
+
+.button-unique {
+  transition-property: -ms-transform, -webkit-transform, transform, background-color, border-color;
+  transition-duration: 0.15s;
+  transition-timing-function: ease-in-out;
+}
+
+.twoPXExtraSize::after {
+  content: "";
+  width: calc(100% + 2px);
+  height: calc(100% + 2px);
+  background-color: transparent;
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  border-top: inherit;
+  border-width: 2px;
+  border-style: solid;
+  border-color: black;
+  border-radius: inherit;
 }
 
 @keyframes dropUp {

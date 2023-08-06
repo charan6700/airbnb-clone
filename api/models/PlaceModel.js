@@ -40,7 +40,7 @@ const PlaceSchema = new Schema(
       title: { type: String, maxLength: 32 },
       description: {
         unique: [String],
-        myDescription: String,
+        summary: String,
       },
     },
 

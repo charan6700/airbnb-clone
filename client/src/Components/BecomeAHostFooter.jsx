@@ -13,10 +13,14 @@ const stagesArray = [
   "amenities",
   "photos",
   "title",
+  "description",
   "",
 ];
 
-export default function BecomeAHostFooter() {
+export default function BecomeAHostFooter({
+  descriptionFirstNextClicked,
+  setDescriptionFirstNextClicked,
+}) {
   const path = useLocation().pathname;
   let currStage = path.split("/").slice(-1);
   currStage = _.kebabCase(currStage);
@@ -29,11 +33,18 @@ export default function BecomeAHostFooter() {
   const navigate = useNavigate();
 
   function handleNextClick() {
-    setProgress(progress + 1);
-    navigate("/become-a-host/" + placeId + "/" + getNextStage(currStage));
+    if (currStage === "description" && !descriptionFirstNextClicked) {
+      setDescriptionFirstNextClicked(true);
+    } else {
+      setProgress(progress + 1);
+      navigate("/become-a-host/" + placeId + "/" + getNextStage(currStage));
+    }
   }
 
   function handleBackClick() {
+    if (currStage === "description") {
+      setDescriptionFirstNextClicked(false);
+    }
     setProgress(progress - 1);
     navigate("/become-a-host/" + placeId + "/" + getPreviousStage(currStage));
   }

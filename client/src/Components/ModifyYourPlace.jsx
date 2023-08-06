@@ -10,12 +10,14 @@ import StandOutPage from "../Pages/StandOutPage";
 import AmenitiesPage from "../Pages/AmenitiesPage";
 import PhotosPage from "../Pages/PhotosPage";
 import TitlePage from "../Pages/TitlePage";
+import DescriptionPage from "../Pages/DescriptionPage";
 
 export default function ModifyYourPlace() {
   const { stage } = useParams();
   const page = _.kebabCase(stage);
 
-  const [placeDoc, setPlaceDoc] = useOutletContext();
+  const [placeDoc, setPlaceDoc, descriptionFirstNextClicked] =
+    useOutletContext();
 
   if (page === "overview") return <BecomeAHostOverviewPage />;
   else if (page === "structure")
@@ -36,6 +38,14 @@ export default function ModifyYourPlace() {
     return <PhotosPage placeDoc={placeDoc} setPlaceDoc={setPlaceDoc} />;
   else if (page === "title")
     return <TitlePage placeDoc={placeDoc} setPlaceDoc={setPlaceDoc} />;
+  else if (page === "description")
+    return (
+      <DescriptionPage
+        placeDoc={placeDoc}
+        setPlaceDoc={setPlaceDoc}
+        descriptionFirstNextClicked={descriptionFirstNextClicked}
+      />
+    );
 
   return <Navigate to={"/become-a-host"} />;
 }

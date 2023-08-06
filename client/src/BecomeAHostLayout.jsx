@@ -11,6 +11,9 @@ export default function BecomeAHostLayout() {
   const [placeDoc, setPlaceDoc] = useState(null);
   const [ready, setReady] = useState(false);
 
+  const [descriptionFirstNextClicked, setDescriptionFirstNextClicked] =
+    useState(false);
+
   useEffect(() => {
     try {
       axios.get("/place/" + placeId).then(
@@ -36,8 +39,8 @@ export default function BecomeAHostLayout() {
   return (
     <div>
       <BecomeAHostHeader placeDoc={placeDoc} />
-      <Outlet context={[placeDoc, setPlaceDoc]} />
-      <BecomeAHostFooter />
+      <Outlet context={[placeDoc, setPlaceDoc, descriptionFirstNextClicked]} />
+      <BecomeAHostFooter descriptionFirstNextClicked={descriptionFirstNextClicked} setDescriptionFirstNextClicked={setDescriptionFirstNextClicked}/>
     </div>
   );
 }

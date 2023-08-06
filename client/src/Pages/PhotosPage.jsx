@@ -11,7 +11,7 @@ function PhotosPage({ placeDoc, setPlaceDoc }) {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    if (images.length < 1) setReady(true);
+    if (images && images.length < 1) setReady(true);
     for (let i = 0; i < images.length; i++) {
       axios
         .get("/image/" + images[i])
@@ -324,7 +324,9 @@ function CoverImageContent({ images, uploadedImages, uploadedPercentage }) {
   return (
     <div className="relative">
       <div className="absolute w-full p-5 flex items-center justify-between">
-        <div className="bg-white text-black font-semibold h-full px-2 py-1 rounded">Cover Photo</div>
+        <div className="bg-white text-black font-semibold h-full px-2 py-1 rounded">
+          Cover Photo
+        </div>
         <div className="">
           <ImageOptionsButton />
         </div>
