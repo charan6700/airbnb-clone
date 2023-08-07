@@ -64,10 +64,13 @@
   transition: border 0.2s, transform 0.1s;
 }
 
-.btn-click-shrink:active {
+.btn-click-shrink {
   transition-property: transform;
   transition-duration: 0.15s;
-  transition-timing-function: cubic-bezier(0.1, 0.9, 0.2, 1);
+  transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+}
+
+.btn-click-shrink:active {
   transform: scale(0.92);
 }
 

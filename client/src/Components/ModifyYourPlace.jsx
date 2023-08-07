@@ -11,6 +11,8 @@ import AmenitiesPage from "../Pages/AmenitiesPage";
 import PhotosPage from "../Pages/PhotosPage";
 import TitlePage from "../Pages/TitlePage";
 import DescriptionPage from "../Pages/DescriptionPage";
+import FinishSetupPage from "../Pages/FinishSetupPage";
+import VisibilityPage from "../Pages/VisibilityPage";
 
 export default function ModifyYourPlace() {
   const { stage } = useParams();
@@ -46,6 +48,10 @@ export default function ModifyYourPlace() {
         descriptionFirstNextClicked={descriptionFirstNextClicked}
       />
     );
+  else if (page === "finish-setup")
+    return <FinishSetupPage placeDoc={placeDoc} setPlaceDoc={setPlaceDoc} />;
+  else if (page === "visibility")
+    return <VisibilityPage placeDoc={placeDoc} setPlaceDoc={setPlaceDoc} />;
 
   return <Navigate to={"/become-a-host"} />;
 }

@@ -14,6 +14,8 @@ const stagesArray = [
   "photos",
   "title",
   "description",
+  "finish-setup",
+  "visibility",
   "",
 ];
 

@@ -158,6 +158,7 @@ app.put("/place/:placeId", async (req, res) => {
     const updatedPlace = await Place.findByIdAndUpdate(placeId, {
       property: newPlaceDoc.property,
       features: newPlaceDoc.features,
+      reservations: newPlaceDoc.reservations,
     });
     console.log(updatedPlace);
     res.json("successfully updated the place!");
