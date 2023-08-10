@@ -1,11 +1,7 @@
-const obj = {
-    one: "djlfd",
-    two: {
-        three: "ldkjfkld",
-        fourth: [{name: "kdjfd", age: 33}]
-    }
-}
+console.log("Running...");
 
-obj.two.fourth[0].age = 99;
+process.on("exit", function (code) {
+  return console.log(`Exiting with code ${code}`);
+});
 
-console.log(obj.two.fourth[0].age);
+throw new Error("test");

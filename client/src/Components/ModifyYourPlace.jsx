@@ -13,6 +13,7 @@ import TitlePage from "../Pages/TitlePage";
 import DescriptionPage from "../Pages/DescriptionPage";
 import FinishSetupPage from "../Pages/FinishSetupPage";
 import VisibilityPage from "../Pages/VisibilityPage";
+import PricePage from "../Pages/PricePage";
 
 export default function ModifyYourPlace() {
   const { stage } = useParams();
@@ -52,6 +53,8 @@ export default function ModifyYourPlace() {
     return <FinishSetupPage placeDoc={placeDoc} setPlaceDoc={setPlaceDoc} />;
   else if (page === "visibility")
     return <VisibilityPage placeDoc={placeDoc} setPlaceDoc={setPlaceDoc} />;
+  else if (page === "price")
+    return <PricePage placeDoc={placeDoc} setPlaceDoc={setPlaceDoc} />;
 
   return <Navigate to={"/become-a-host"} />;
 }

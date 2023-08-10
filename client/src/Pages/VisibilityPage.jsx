@@ -14,7 +14,6 @@ export default function VisibilityPage({ placeDoc, setPlaceDoc }) {
         reservations: { ...prev.reservations, visibility: value },
       };
     });
-    console.log(placeDoc);
   }
 
   return (

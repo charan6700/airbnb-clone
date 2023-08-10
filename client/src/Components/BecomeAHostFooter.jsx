@@ -16,6 +16,7 @@ const stagesArray = [
   "description",
   "finish-setup",
   "visibility",
+  "price",
   "",
 ];
 
@@ -61,6 +62,11 @@ export default function BecomeAHostFooter({
     return Math.min(value, 100);
   }
 
+  function getStepThreeProgressPercentage(progress) {
+    const value = Math.round(((progress - 11) / 5) * 100);
+    return Math.min(value, 100);
+  }
+
   return (
     <div className="fixed bottom-0 z-10 w-full bg-white">
       <div className="flex w-full">
@@ -86,7 +92,17 @@ export default function BecomeAHostFooter({
             className="bg-black relative w-full h-full -left-full"
           ></div>
         </div>
-        <div className="h-[6px] w-1/3 bg-neutral-200"></div>
+        <div className="h-[6px] w-1/3 bg-neutral-200 overflow-x-hidden">
+          <div
+            style={{
+              transition: "transform 600ms linear 0s",
+              transform: `translateX(${getStepThreeProgressPercentage(
+                progress
+              )}%)`,
+            }}
+            className="bg-black relative w-full h-full -left-full"
+          ></div>
+        </div>
       </div>
       <div className="flex justify-between items-center px-10 py-4">
         <div className="">
