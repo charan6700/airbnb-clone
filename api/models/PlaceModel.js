@@ -48,9 +48,18 @@ const PlaceSchema = new Schema(
       visibility: String,
       price: Number,
       discounts: {
-        newListing: Boolean,
-        weekly: Boolean,
-        monthly: Boolean,
+        newListing: {
+          isSet: { type: Boolean, default: true },
+          value: { type: Number, default: 20, min: 0, max: 99 },
+        },
+        weekly: {
+          isSet: { type: Boolean, default: true },
+          value: { type: Number, default: 10, min: 0, max: 99 },
+        },
+        monthly: {
+          isSet: { type: Boolean, default: true },
+          value: { type: Number, default: 20, min: 0, max: 99 },
+        },
       },
       legal: {
         securityCameras: Boolean,

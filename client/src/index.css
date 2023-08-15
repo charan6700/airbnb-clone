@@ -20,7 +20,7 @@
 }
 
 .mainContentFooter {
-  height: calc(100vh - calc(88px + 82px));
+  height: calc(100vh - calc(170px));
 }
 
 .mainContentFooterScrolled {
@@ -111,6 +111,23 @@
 }
 
 .textarea-container-invalid-active {
+  box-shadow: firebrick 0px 0px 0px 2px inset;
+}
+
+.discount-input-container {
+  box-shadow: grey 0px 0px 0px 1px inset;
+}
+
+.discount-input-invalid {
+  box-shadow: firebrick 0px 0px 0px 1px inset;
+  background-color: rgb(255, 248, 246);
+}
+
+.discount-input-active {
+  box-shadow: black 0px 0px 0px 2px inset;
+}
+
+.discount-input-invalid-active {
   box-shadow: firebrick 0px 0px 0px 2px inset;
 }
 

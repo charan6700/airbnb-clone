@@ -1,13 +1,23 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MainContainerWithFooter from "../Components/MainContainerWithFooter";
 
 export default function PricePage({ placeDoc, setPlaceDoc }) {
-  const [price, setPrice] = useState(placeDoc?.reservations.price || "3,239");
+  const [price, setPrice] = useState(placeDoc?.reservations.price || 3529);
+  const [formattedPrice, seFormattedPrice] = useState(formatPrice(price));
 
   const [showPriceDivision, setShowPriceDivision] = useState(false);
 
   const [guestPriceExpanded, setGuestPriceExpanded] = useState(true);
   const [youEarnExpanded, setYouEarnExpanded] = useState(false);
+
+  useEffect(() => {
+    setPlaceDoc((prev) => {
+      return {
+        ...prev,
+        reservations: { ...prev.reservations, price: price },
+      };
+    });
+  }, [price]);
 
   //guest service tax 14.1177%
   //host service fee 3%
@@ -15,6 +25,28 @@ export default function PricePage({ placeDoc, setPlaceDoc }) {
   function handleClick() {
     setGuestPriceExpanded(!guestPriceExpanded);
     setYouEarnExpanded(!youEarnExpanded);
+  }
+
+  function getGuestServiceFee(price) {
+    let fee = price * 0.141177;
+    fee = Math.round(fee);
+
+    return fee;
+  }
+
+  function getHostServiceFee(price) {
+    let fee = price * 0.03;
+    fee = Math.round(fee);
+
+    return fee;
+  }
+
+  function formatPrice(price) {
+    if (price == 0 || !price) {
+      return "";
+    } else {
+      return parseInt(price).toLocaleString();
+    }
   }
 
   return (
@@ -30,26 +62,34 @@ export default function PricePage({ placeDoc, setPlaceDoc }) {
                 You can change it anytime.
               </span>
             </div>
-            <div className="flex gap-4 flex-wrap items-center justify-center pb-6 pt-1 w-full">
+            <div
+              className={
+                "flex gap-4 flex-wrap items-center justify-center py-5 mb-4 w-full transition-all duration-200 ease-in-out border" +
+                (showPriceDivision ? " border-none" : " rounded-2xl border-neutral-400")
+              }
+            >
               <div className="relative text-[47.9px] font-bold">
                 <div className="flex h-full w-full">
                   <span>₹</span>
-                  <span>{price}</span>
+                  <span>{formattedPrice}</span>
                 </div>
                 <input
                   type="text"
                   inputMode="numeric"
                   name=""
                   id=""
-                  value={price}
+                  value={formattedPrice}
                   onChange={(ev) => {
                     let val = ev.target.value;
                     if (val === "0" || !val) {
-                      setPrice("");
+                      setPrice(0);
+                      seFormattedPrice("");
                     } else {
                       let numberVal = val.replaceAll(",", "");
                       if (!numberVal.includes(".") && !isNaN(numberVal)) {
-                        setPrice(parseInt(numberVal).toLocaleString());
+                        let numberInt = parseInt(numberVal);
+                        setPrice(numberInt);
+                        seFormattedPrice(formatPrice(numberInt));
                       }
                     }
                   }}
@@ -62,13 +102,21 @@ export default function PricePage({ placeDoc, setPlaceDoc }) {
                 <div className="w-full grid gap-y-3">
                   <ExpandablePriceDivision
                     price={price}
+                    formattedPrice={formattedPrice}
                     expanded={guestPriceExpanded}
                     handleClick={handleClick}
+                    feeType={"guest"}
+                    getFee={getGuestServiceFee}
+                    formatPrice={formatPrice}
                   />
                   <ExpandablePriceDivision
                     price={price}
+                    formattedPrice={formattedPrice}
                     expanded={youEarnExpanded}
                     handleClick={handleClick}
+                    feeType={"host"}
+                    getFee={getHostServiceFee}
+                    formatPrice={formatPrice}
                   />
                 </div>
                 <div className="w-full mt-5">
@@ -88,7 +136,8 @@ export default function PricePage({ placeDoc, setPlaceDoc }) {
                   onClick={() => setShowPriceDivision(true)}
                 >
                   <div className="text-neutral-600">
-                    Guest price before taxes ${price}
+                    Guest price before taxes $
+                    {formatPrice(price + getGuestServiceFee(price))}
                   </div>
                   <ExpandIcon />
                 </button>
@@ -101,7 +150,26 @@ export default function PricePage({ placeDoc, setPlaceDoc }) {
   );
 }
 
-function ExpandablePriceDivision({ price, expanded, handleClick }) {
+function ExpandablePriceDivision({
+  price,
+  formattedPrice,
+  expanded,
+  handleClick,
+  feeType,
+  getFee,
+  formatPrice,
+}) {
+  let feeTitle, title, total;
+  if (feeType == "guest") {
+    feeTitle = "Guest service fee";
+    title = "Guest price before taxes";
+    total = price + getFee(price);
+  } else {
+    feeTitle = "Host service fee";
+    title = "You earn";
+    total = price - getFee(price);
+  }
+
   return (
     <button
       className={
@@ -124,11 +192,13 @@ function ExpandablePriceDivision({ price, expanded, handleClick }) {
           <div className={"w-full pt-2" + (expanded ? "" : " hidden")}>
             <div className="flex w-full justify-between pb-1 text-neutral-700">
               <div>Base price</div>
-              <div>₹{price}</div>
+              <div>₹{formattedPrice}</div>
             </div>
             <div className="flex w-full justify-between pb-2 text-neutral-700">
-              <div>Guest service fee</div>
-              <div>₹{price}</div>
+              <div>{feeTitle}</div>
+              <div>
+                {feeType === "guest" ? "" : "-"}₹{formatPrice(getFee(price))}
+              </div>
             </div>
           </div>
         </div>
@@ -141,8 +211,8 @@ function ExpandablePriceDivision({ price, expanded, handleClick }) {
             (expanded ? " pb-2" : "")
           }
         >
-          <div>Guest price before taxes</div>
-          <div>₹{price}</div>
+          <div>{title}</div>
+          <div>₹{formatPrice(total)}</div>
         </div>
       </div>
     </button>

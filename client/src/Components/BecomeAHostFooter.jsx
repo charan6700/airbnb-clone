@@ -17,6 +17,7 @@ const stagesArray = [
   "finish-setup",
   "visibility",
   "price",
+  "discount",
   "",
 ];
 

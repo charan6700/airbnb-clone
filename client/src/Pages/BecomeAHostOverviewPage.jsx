@@ -52,7 +52,7 @@ export default function BecomeAHostOverviewPage() {
             title: null,
             description: {
               unique: [],
-              myDescription: null,
+              summary: null,
             },
           },
 
@@ -60,9 +60,9 @@ export default function BecomeAHostOverviewPage() {
             visibility: null,
             price: null,
             discounts: {
-              newListing: null,
-              weekly: null,
-              monthly: null,
+              newListing: { isSet: true, value: 20 },
+              weekly: { isSet: true, value: 10 },
+              monthly: { isSet: true, value: 20 },
             },
             legal: {
               securityCameras: null,

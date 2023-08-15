@@ -4,26 +4,26 @@ import FormInput from "../Components/FormInput";
 
 export default function LocationPage({ placeDoc, setPlaceDoc }) {
   const [countryCode, setCountryCode] = useState(
-    placeDoc?.property.location.countryCode
+    placeDoc?.property.location.countryCode || "IN"
   );
   const [houseFlatBldg, setHouseFlatBldg] = useState(
-    placeDoc?.property.location.houseFlatBldg
+    placeDoc?.property.location.houseFlatBldg || ""
   );
   const [areaVillage, setAreaVillage] = useState(
-    placeDoc?.property.location.areaVillage
+    placeDoc?.property.location.areaVillage || ""
   );
   const [streetAddress, setStreetAddress] = useState(
-    placeDoc?.property.location.streetAddress
+    placeDoc?.property.location.streetAddress || ""
   );
   const [nearbyLandmark, setNearbyLandmark] = useState(
-    placeDoc?.property.location.nearbyLandmark
+    placeDoc?.property.location.nearbyLandmark || ""
   );
   const [cityTown, setCityTown] = useState(
-    placeDoc?.property.location.cityTown
+    placeDoc?.property.location.cityTown || ""
   );
-  const [pinCode, setPinCode] = useState(placeDoc?.property.location.pinCode);
+  const [pinCode, setPinCode] = useState(placeDoc?.property.location.pinCode || "");
   const [countyProvince, setCountyProvince] = useState(
-    placeDoc?.property.location.countyProvince
+    placeDoc?.property.location.countyProvince || ""
   );
 
   useEffect(() => {

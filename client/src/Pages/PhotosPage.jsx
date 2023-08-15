@@ -23,6 +23,18 @@ function PhotosPage({ placeDoc, setPlaceDoc }) {
     }
   }, []);
 
+  useEffect(() => {
+    setPlaceDoc((prev) => {
+      return {
+        ...prev,
+        features: {
+          ...prev.features,
+          photos: uploadedImages,
+        },
+      };
+    });
+  }, [uploadedImages]);
+
   if (!ready) return <div></div>;
 
   return (
