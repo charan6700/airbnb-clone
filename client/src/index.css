@@ -37,8 +37,34 @@
   display: none;
 }
 
+.modal-background {
+  animation: modal-background-fadeIn 0.4s both;
+  background: #222222;
+}
+
+.modal-shadow {
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.28);
+}
+
+.modal-fadeOut {
+  animation: modal-background-fadeOut 0.4s both;
+  background: #222222;
+}
+
 .popup-animation {
   animation: dropUp 0.4s both;
+}
+
+.blowIn-animation {
+  animation: blowIn 0.4s both;
+}
+
+.blowOut-animation {
+  animation: blowOut 0.4s both;
+}
+
+.slideDown-animation {
+  animation: dropDown 0.4s both;
 }
 
 .fade-in {
@@ -66,6 +92,28 @@
 .black-border-hover:hover {
   border: 1px solid black;
   transition: border 0.2s, transform 0.1s;
+}
+
+.btn-hover-bg {
+  position: relative;
+}
+
+.btn-hover-bg::before {
+  content: "";
+  position: absolute;
+  display: block;
+  width: 32px;
+  height: 32px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+}
+
+.btn-hover-bg:hover::before {
+  content: "";
+  background-color: rgb(245 245 245);
+  ;
 }
 
 .btn-click-shrink {
@@ -161,6 +209,62 @@
   100% {
     opacity: 1;
     transform: none;
+  }
+}
+
+@keyframes dropDown {
+  0% {
+    opacity: 1;
+    transform: none;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+}
+
+@keyframes blowIn {
+  0% {
+    opacity: 0;
+    scale: 0;
+  }
+
+  100% {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+@keyframes blowOut {
+  0% {
+    opacity: 1;
+    scale: 1;
+  }
+
+  100% {
+    opacity: 0;
+    scale: 0;
+  }
+}
+
+@keyframes modal-background-fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes modal-background-fadeOut {
+  0% {
+    opacity: 0.6;
+  }
+
+  100% {
+    opacity: 0;
   }
 }
 

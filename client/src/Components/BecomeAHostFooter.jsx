@@ -18,6 +18,7 @@ const stagesArray = [
   "visibility",
   "price",
   "discount",
+  "legal",
   "",
 ];
 
