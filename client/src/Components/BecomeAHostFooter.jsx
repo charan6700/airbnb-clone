@@ -19,6 +19,7 @@ const stagesArray = [
   "price",
   "discount",
   "legal",
+  "receipt",
   "",
 ];
 

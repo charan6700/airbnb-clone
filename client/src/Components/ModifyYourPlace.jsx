@@ -16,6 +16,7 @@ import VisibilityPage from "../Pages/VisibilityPage";
 import PricePage from "../Pages/PricePage";
 import DiscountPage from "../Pages/DiscountPage";
 import LegalPage from "../Pages/LegalPage";
+import ReceiptPage from "../Pages/ReceiptPage";
 
 export default function ModifyYourPlace() {
   const { stage } = useParams();
@@ -61,6 +62,8 @@ export default function ModifyYourPlace() {
     return <DiscountPage placeDoc={placeDoc} setPlaceDoc={setPlaceDoc} />;
   else if (page === "legal")
     return <LegalPage placeDoc={placeDoc} setPlaceDoc={setPlaceDoc} />;
+  else if (page === "receipt")
+    return <ReceiptPage placeDoc={placeDoc} setPlaceDoc={setPlaceDoc} />;
 
   return <Navigate to={"/become-a-host"} />;
 }

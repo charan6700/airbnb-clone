@@ -12,7 +12,6 @@ const Place = require("./models/PlaceModel");
 const Image = require("./models/ImageModel");
 
 const salt = bcrypt.genSaltSync(10);
-const secret = "djf8ueh3ad939j3k8ejh398";
 
 const app = express();
 
@@ -71,7 +70,7 @@ app.post("/login", async (req, res) => {
     if (bcrypt.compareSync(password, foundUser.password)) {
       jwt.sign(
         { email: foundUser.email, id: foundUser._id },
-        secret,
+        process.env.JWT_SECRET,
         {},
         (err, token) => {
           if (err) throw err;
@@ -95,7 +94,7 @@ app.get("/profile", async (req, res) => {
   const { token } = req.cookies;
 
   if (token) {
-    jwt.verify(token, secret, {}, async (err, userData) => {
+    jwt.verify(token, process.env.JWT_SECRET, {}, async (err, userData) => {
       if (err) throw err;
       const { name, email, _id, listings } = await User.findById(
         userData.id
@@ -112,7 +111,7 @@ app.post("/place", async (req, res) => {
   const { property, features, reservations } = req.body;
 
   if (token) {
-    jwt.verify(token, secret, {}, async (err, userData) => {
+    jwt.verify(token, process.env.JWT_SECRET, {}, async (err, userData) => {
       if (err) res.status(400).json(err);
       const ownerDoc = await User.findById(userData.id).exec();
       try {
