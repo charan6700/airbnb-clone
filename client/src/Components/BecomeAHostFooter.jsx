@@ -110,7 +110,7 @@ export default function BecomeAHostFooter({
       <div className="flex justify-between items-center px-10 py-4">
         <div className="">
           <button
-            className="font-semibold underline py-2 px-3 rounded-xl hover:bg-neutral-100"
+            className="font-semibold underline py-2 px-3 btn-click-shrink rounded-xl hover:bg-neutral-100"
             onClick={handleBackClick}
           >
             Back
@@ -118,7 +118,7 @@ export default function BecomeAHostFooter({
         </div>
         <div>
           <button
-            className="bg-slate-900 text font-semibold px-8 py-3 rounded-lg text-white hover:bg-black"
+            className="bg-slate-900 text font-semibold btn-click-shrink px-8 py-3 rounded-lg text-white hover:bg-black"
             onClick={handleNextClick}
           >
             Next

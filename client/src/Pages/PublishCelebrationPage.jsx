@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import ReactPlayer from "react-player";
+import { UserContext } from "../../UserContext";
+import { useNavigate } from "react-router-dom";
 
 function PublishCelebrationPage() {
   const [videoPlaying, setVideoPlaying] = useState(false);
@@ -9,6 +11,10 @@ function PublishCelebrationPage() {
   const [videoProgress, setVideoProgress] = useState(0);
   const [isVideoMute, setIsVideoMute] = useState(false);
   const [subtitleOn, setSubtitleOn] = useState(false);
+
+  const { user } = useContext(UserContext);
+
+  const navigate = useNavigate();
 
   return (
     <div className="flex w-[100vw] h-[100vh]">
@@ -87,7 +93,38 @@ function PublishCelebrationPage() {
           </div>
         )}
       </div>
-      <div className="w-1/2 h-full bg-black"></div>
+      <div className="w-1/2 h-full relative bg-black flex flex-col items-center justify-center">
+        <div className="max-w-[480px] mx-auto my-[82px] overflow-y-auto no-scrollbar">
+          <div className="text-white text-5xl font-semibold mb-10">
+            <h1>Congratulations, {user?.name.split(" ")[0]}!</h1>
+          </div>
+          <div className="text-white leading-5 text-[17px] mb-6">
+            <span>
+              From one Host to another – welcome aboard. Thank you for sharing
+              your home and helping to create incredible experiences for our
+              guests.
+            </span>
+          </div>
+          <div>
+            <img
+              src="https://a0.muscache.com/pictures/03077a3c-d04f-4136-999f-9b579772597d.jpg"
+              alt=""
+              width={"78px"}
+            />
+          </div>
+          <div className="text-white text-[13px] font-semibold">
+            Barry Chuckle, CEO
+          </div>
+        </div>
+        <div className="fixed text-white w-[50vw] bg-black z-10 py-4 border-t border-neutral-800 bottom-0 flex items-center justify-end">
+          <button
+            className="bg-primary btn-click-shrink text-[17px] hover:bg-primaryHover px-8 py-3 mr-8 rounded-lg"
+            onClick={() => navigate("/hosting")}
+          >
+            Let's get started
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

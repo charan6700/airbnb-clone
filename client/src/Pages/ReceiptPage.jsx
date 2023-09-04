@@ -24,7 +24,7 @@ export default function ReceiptPage({ placeDoc, setPlaceDoc, user }) {
 
   useEffect(() => {
     axios
-      .get("/image/" + placeDoc.features.photos[0])
+      .get("/image/" + placeDoc?.features.photos[0])
       .then(({ data }) => {
         setCoverImageFileName(data.fileName);
         setReady(true);

@@ -19,7 +19,6 @@ import LegalPage from "../Pages/LegalPage";
 import ReceiptPage from "../Pages/ReceiptPage";
 import { useContext } from "react";
 import { UserContext } from "../../UserContext";
-import PublishCelebrationPage from "../Pages/PublishCelebrationPage";
 
 export default function ModifyYourPlace() {
   const { stage } = useParams();
