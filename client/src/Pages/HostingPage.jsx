@@ -32,7 +32,7 @@ export default function HostingPage() {
             <button
               className="border border-black p-2 rounded-lg font-semibold hover:bg-gray-100 btn-click-shrink"
               onClick={() => {
-                navigate("/become-a-host");
+                window.open("/become-a-host", "_blank", "noreferrer");
               }}
             >
               Complete your listing{user?.listings.length > 1 && "s"}

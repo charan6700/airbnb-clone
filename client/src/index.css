@@ -145,6 +145,10 @@
   transition: stroke-dasharray 0.2s ease 0s;
 }
 
+.video-progress-circle {
+  transition: stroke-dashoffset 0.25s cubic-bezier(0, 0, 1, 1);
+}
+
 .textarea-container {
   box-shadow: grey 0px 0px 0px 1px inset;
 }
@@ -198,6 +202,25 @@
   border-style: solid;
   border-color: black;
   border-radius: inherit;
+}
+
+.photo-container-shadow {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.react-player-container>div>video {
+  object-fit: cover;
+}
+
+.video-play-btn {
+  background-color: rgba(32, 32, 32, 0.4);
+  backdrop-filter: blur(60px) saturate(180%);
+}
+
+.video-control-btn {
+  background-color: rgba(32, 32, 32, 0.4);
+  backdrop-filter: blur(60px) saturate(180%);
 }
 
 @keyframes dropUp {

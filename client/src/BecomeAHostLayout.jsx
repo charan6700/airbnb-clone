@@ -18,7 +18,6 @@ export default function BecomeAHostLayout() {
     try {
       axios.get("/place/" + placeId).then(
         ({ data }) => {
-          console.log("found data in layout: " + data);
           if (!data) throw new Error("No place exists for id: ", placeId);
           setPlaceDoc(data);
           setReady(true);
@@ -40,7 +39,10 @@ export default function BecomeAHostLayout() {
     <div>
       <BecomeAHostHeader placeDoc={placeDoc} />
       <Outlet context={[placeDoc, setPlaceDoc, descriptionFirstNextClicked]} />
-      <BecomeAHostFooter descriptionFirstNextClicked={descriptionFirstNextClicked} setDescriptionFirstNextClicked={setDescriptionFirstNextClicked}/>
+      <BecomeAHostFooter
+        descriptionFirstNextClicked={descriptionFirstNextClicked}
+        setDescriptionFirstNextClicked={setDescriptionFirstNextClicked}
+      />
     </div>
   );
 }

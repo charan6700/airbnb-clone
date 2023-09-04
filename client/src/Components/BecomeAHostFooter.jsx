@@ -20,7 +20,7 @@ const stagesArray = [
   "discount",
   "legal",
   "receipt",
-  "",
+  "publish-celebration",
 ];
 
 export default function BecomeAHostFooter({
@@ -66,7 +66,7 @@ export default function BecomeAHostFooter({
   }
 
   function getStepThreeProgressPercentage(progress) {
-    const value = Math.round(((progress - 11) / 5) * 100);
+    const value = Math.round(((progress - 11) / 6) * 100);
     return Math.min(value, 100);
   }
 

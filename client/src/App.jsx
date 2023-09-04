@@ -19,6 +19,7 @@ import StructurePage from "./Pages/StructurePage";
 import BecomeAHostPage from "./Pages/BecomeAHostPage";
 import BecomeAHostOverviewPage from "./Pages/BecomeAHostOverviewPage";
 import ModifyYourPlace from "./Components/ModifyYourPlace";
+import PublishCelebrationPage from "./Pages/PublishCelebrationPage";
 
 axios.defaults.baseURL = "http://localhost:3000/";
 axios.defaults.withCredentials = true;
@@ -77,6 +78,14 @@ function App() {
             element={<ModifyYourPlace />}
           />
         </Route>
+        <Route
+          path="/become-a-host/:placeId/publish-celebration"
+          element={
+            <PrivateRoute>
+              <PublishCelebrationPage />
+            </PrivateRoute>
+          }
+        />
         <Route path="*" element={<div></div>} />
         <Route path="/logout" element={<Logout />} />
         <Route path="*" element={<div></div>} />

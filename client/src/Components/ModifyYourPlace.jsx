@@ -17,10 +17,15 @@ import PricePage from "../Pages/PricePage";
 import DiscountPage from "../Pages/DiscountPage";
 import LegalPage from "../Pages/LegalPage";
 import ReceiptPage from "../Pages/ReceiptPage";
+import { useContext } from "react";
+import { UserContext } from "../../UserContext";
+import PublishCelebrationPage from "../Pages/PublishCelebrationPage";
 
 export default function ModifyYourPlace() {
   const { stage } = useParams();
   const page = _.kebabCase(stage);
+
+  const { user } = useContext(UserContext);
 
   const [placeDoc, setPlaceDoc, descriptionFirstNextClicked] =
     useOutletContext();
@@ -63,7 +68,9 @@ export default function ModifyYourPlace() {
   else if (page === "legal")
     return <LegalPage placeDoc={placeDoc} setPlaceDoc={setPlaceDoc} />;
   else if (page === "receipt")
-    return <ReceiptPage placeDoc={placeDoc} setPlaceDoc={setPlaceDoc} />;
+    return (
+      <ReceiptPage placeDoc={placeDoc} setPlaceDoc={setPlaceDoc} user={user} />
+    );
 
   return <Navigate to={"/become-a-host"} />;
 }

@@ -1,7 +1,3 @@
-console.log("Running...");
+const val = 230 - 220 * (1 / 2);
 
-process.on("exit", function (code) {
-  return console.log(`Exiting with code ${code}`);
-});
-
-throw new Error("test");
+console.log(val);
